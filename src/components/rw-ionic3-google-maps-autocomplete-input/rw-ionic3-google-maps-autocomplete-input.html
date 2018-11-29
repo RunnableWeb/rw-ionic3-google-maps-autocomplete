@@ -1,4 +1,16 @@
-<!-- Generated template for the RwIonic3GoogleMapsAutocompleteInputComponent component -->
-<div>
-  {{text}}
+<ion-item text-wrap #inputContainer class="input-container" [ngClass]="{'input-container-error':isFormSubmitted() && required && !autocomplete.value}">
+  <ion-icon item-start class="bluelight-color" name="pin"> </ion-icon>
+  <ion-label floating>
+    {{placeholder}}
+  </ion-label>
+  <ion-input (blur)='onBlur()' id="googlePlacesSearchInputWrapper" [(ngModel)]="autocomplete.value" (input)="updateSearchResults()"
+    type="text" required="{{required}}"></ion-input>
+</ion-item>
+<div class="auto-complete-items" [hidden]="autocompleteItems.length == 0">
+  <ion-list>
+    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+      <ion-icon name="pin" item-start></ion-icon>
+      {{ item.description }}
+    </ion-item>
+  </ion-list>
 </div>

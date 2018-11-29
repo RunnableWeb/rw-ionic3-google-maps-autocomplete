@@ -1,3 +1,22 @@
 rw-ionic3-google-maps-autocomplete-input {
-
+    // .input-container {
+    //     height: 100%;
+    //     input {
+    //         margin: 0.45vh; // font-size: $font-size-input;
+    //     }
+    // }    
+    // .input-container-error {
+    //     input {
+    //         color: red;
+    //         &::placeholder {
+    //             color: red;
+    //             opacity: 1;
+    //         }
+    //     }
+    // }
+    .auto-complete-items {
+        box-shadow: 2px 0px 1px 0px rgba(0, 0, 0, 0.329412);
+        width: 275px;
+        ion-item {}
+    }
 }
