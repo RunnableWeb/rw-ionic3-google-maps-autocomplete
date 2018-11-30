@@ -29,7 +29,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   constructor(public zone: NgZone) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.geocoder = new google.maps.Geocoder;
-    this.autocomplete = { value: '', position: { lat: 0, lng: 0 } };
+    this.autocomplete = { value: '', location: { lat: 0, lng: 0 } };
     this.autocompleteItems = [];
   }
   ngOnInit(): void { }
@@ -70,7 +70,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     this.autocompleteItems = [];
     this.geocoder.geocode({ 'placeId': item.place_id }, (results, status) => {
       if (status === 'OK' && results[0]) {
-        this.autocomplete.position = {
+        this.autocomplete.location = {
           lat: results[0].geometry.location.lat(),
           lng: results[0].geometry.location.lng()
         };
@@ -88,7 +88,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     //we need to find a way to change text color on error    
     console.log(this.inputContainer);
 
-    if ((!this.autocomplete.value || !this.autocomplete.position.lat || !this.autocomplete.position.lng) && this.required && this.inputWasFocused) {
+    if ((!this.autocomplete.value || !this.autocomplete.location.lat || !this.autocomplete.location.lng) && this.required && this.inputWasFocused) {
       // this.inputContainer.nativeElement.className = 'input-container input-container-error';
       return {
         "location": "location not valid"
@@ -109,7 +109,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
 
 export interface IFormGooglePlacesInput {
   value: string;
-  position: {
+  location: {
     lat: string | number;
     lng: string | number
   }
