@@ -14,9 +14,42 @@ rw-ionic3-google-maps-autocomplete-input {
     //         }
     //     }
     // }
-    .auto-complete-items {
-        box-shadow: 2px 0px 1px 0px rgba(0, 0, 0, 0.329412);
-        width: 275px;
-        ion-item {}
+    .rw-ionic3-google-maps-autocomplete-wrapper {        
+        position: relative;
+        .auto-complete-items {
+            position: absolute;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.329412)
+        }
+    }
+    .hide-auto-complete {
+        position: absolute;
+        z-index: 1;
+        left: 0;
+        top: 0;
+    }
+    .value-chips-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 5px;
+        .value-chip {
+            overflow: hidden;
+            margin: 4px;
+            padding: 7px;
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            border-radius: 7px;
+            white-space: nowrap;
+            box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.10980392156862745);
+            display: flex;
+            >div:nth-child(1) {
+                overflow: hidden;
+                width: 95%;
+            }
+            >div:nth-child(2) {
+                margin-right: 7px;
+                color: red;
+            }
+        }
     }
 }
