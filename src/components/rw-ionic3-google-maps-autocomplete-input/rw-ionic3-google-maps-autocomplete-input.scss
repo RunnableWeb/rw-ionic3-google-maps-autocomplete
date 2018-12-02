@@ -14,7 +14,7 @@ rw-ionic3-google-maps-autocomplete-input {
     //         }
     //     }
     // }
-    .rw-ionic3-google-maps-autocomplete-wrapper {        
+    .rw-ionic3-google-maps-autocomplete-wrapper {
         position: relative;
         .auto-complete-items {
             position: absolute;
@@ -33,6 +33,12 @@ rw-ionic3-google-maps-autocomplete-input {
         display: flex;
         flex-wrap: wrap;
         margin-top: 5px;
+        @include rtl() {
+            margin-right: 15px;
+        }
+        @include ltr() {
+            margin-left: 15px;
+        }
         .value-chip {
             overflow: hidden;
             margin: 4px;
