@@ -81,8 +81,6 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   }
 
   selectSearchResult(item) {
-    console.log(item);
-
     let selectedValue: IFormGooglePlacesInput = {
       id: item.place_id,
       value: item.description,
@@ -150,9 +148,11 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
       return null
     }
   }
-  writeValue(value: IFormGooglePlacesInput): void {
-    if (value) {
-      this.autocomplete = value;
+  writeValue(value: IFormGooglePlacesInput | Array<IFormGooglePlacesInput>): void {
+    if (this.model.multiple) {
+      this.autocompleteArray = value as Array<IFormGooglePlacesInput> || [];
+    } else {
+      this.autocomplete = value as IFormGooglePlacesInput || {} as IFormGooglePlacesInput;
     }
   }
   registerOnTouched(fn: any): void { }
