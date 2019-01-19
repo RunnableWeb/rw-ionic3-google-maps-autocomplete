@@ -138,7 +138,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
         }
       }
     } else {
-      if ((!this.autocomplete.value || !this.autocomplete.location.lat || !this.autocomplete.location.lng) && this.required && this.inputWasFocused) {
+      if ((!this.autocomplete.value || !this.autocomplete.location ||!this.autocomplete.location.lat || !this.autocomplete.location.lng) && this.required && this.inputWasFocused) {
         // this.inputContainer.nativeElement.className = 'input-container input-container-error';
         return {
           "location": "location not valid"
