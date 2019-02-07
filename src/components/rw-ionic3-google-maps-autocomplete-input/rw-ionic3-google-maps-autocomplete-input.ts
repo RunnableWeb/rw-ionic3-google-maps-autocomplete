@@ -22,7 +22,8 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     multiple: false,
     checkBoxColor: 'primary',
     inputType: ERWInputType.fixed,
-    iconColor: 'primary'
+    iconColor: 'primary',
+    countryCode: 'IL'
   };
 
   @Input() required = false;
@@ -39,15 +40,22 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   geocoder: any;
   onchange: any;
   inputWasFocused: boolean = false;
-  constructor(public zone: NgZone, private _renderer: Renderer) {
-    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
-    this.geocoder = new google.maps.Geocoder;
-    this.autocompleteItems = [];
+  constructor(
+    public zone: NgZone, 
+    private _renderer: Renderer) {
   }
   ngOnInit(): void {
     this.initAutoComplete();
   }
   initAutoComplete() {
+    
+    this.model.countryCode = this.model.countryCode || 'IL';
+
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
+    
+    this.geocoder = new google.maps.Geocoder;
+    this.autocompleteItems = [];
+
     this.autocomplete = { value: '', location: { lat: 0, lng: 0 }, id: -1 };
   }
   isFormSubmitted() {
@@ -65,7 +73,11 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
       this.autocompleteItems = [];
       return;
     } else if (query.length > 2) {
-      this.GoogleAutocomplete.getPlacePredictions({ input: query },
+      this.GoogleAutocomplete.getPlacePredictions({ 
+        input: query,
+        types: ['(cities)'],
+        componentRestrictions: { country: this.model.countryCode },
+      },
         (predictions, status) => {
           this.autocompleteItems = [];
           this.zone.run(() => {
@@ -95,8 +107,8 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
       this.zone.run(() => {
         if (status === 'OK' && results[0]) {
           selectedValue.location = {
-            lat: results[0].geometry.location.lat(),
-            lng: results[0].geometry.location.lng()
+            lat: Number.parseFloat(results[0].geometry.location.lat().toFixed(7)),
+            lng: Number.parseFloat(results[0].geometry.location.lng().toFixed(7))
           };
 
           if (this.model.multiple) {
@@ -176,5 +188,6 @@ export interface IRWionic3GoogleMapsAutocompleteInputModel {
   checkBoxColor?: string;
   inputType?: ERWInputType
   placeholder: string;
+  countryCode?: string
 }
 
