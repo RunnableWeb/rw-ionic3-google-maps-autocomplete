@@ -12,7 +12,6 @@ declare const google: any;
     { provide: NG_VALUE_ACCESSOR, useExisting: RwIonic3GoogleMapsAutocompleteInputComponent, multi: true },
     { provide: NG_VALIDATORS, useExisting: RwIonic3GoogleMapsAutocompleteInputComponent, multi: true }
   ]
-
 })
 export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValueAccessor, OnInit, Validator {
   @Input() model: IRWionic3GoogleMapsAutocompleteInputModel = {
@@ -93,6 +92,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   }
 
   selectSearchResult(item) {
+    // debugger;
     let selectedValue: IFormGooglePlacesInput = {
       id: item.place_id,
       value: item.description,
@@ -105,6 +105,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
       this.autocompleteItems = [];
     this.geocoder.geocode({ 'placeId': item.place_id }, (results, status) => {
       this.zone.run(() => {
+        // debugger;
         if (status === 'OK' && results[0]) {
           selectedValue.location = {
             lat: Number.parseFloat(results[0].geometry.location.lat().toFixed(7)),
@@ -141,26 +142,34 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     this.onchange = fn;
   }
   validate() {
+    // debugger;
+    // console.log('validate reached');
     if (this.model.multiple) {
       if (this.autocompleteArray.length == 0 && this.required && this.inputWasFocused) {
         {
+          // console.log("validator will return object -> Array");
           return {
             "location": "location not valid"
           };
+
         }
       }
     } else {
-      if ((!this.autocomplete.value || !this.autocomplete.location ||!this.autocomplete.location.lat || !this.autocomplete.location.lng) && this.required && this.inputWasFocused) {
-        // this.inputContainer.nativeElement.className = 'input-container input-container-error';
+      if ((!this.autocomplete.value || !this.autocomplete.location ||!this.autocomplete.location.lat || !this.autocomplete.location.lng) 
+          && this.required && this.inputWasFocused) {
+        
+        // console.log("validator will return object");
         return {
           "location": "location not valid"
         };
       }
-      // this.inputContainer.nativeElement.className = 'input-container';
+    
+      // console.log("validator will return null");
       return null
     }
   }
   writeValue(value: IFormGooglePlacesInput | Array<IFormGooglePlacesInput>): void {
+    // debugger;
     if (this.model.multiple) {
       this.autocompleteArray = value as Array<IFormGooglePlacesInput> || [];
     } else {

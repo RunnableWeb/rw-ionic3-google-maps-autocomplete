@@ -9,7 +9,7 @@
     <ion-label *ngIf="model.inputType == eInputType.floating" floating>{{model?.placeholder|translate}}</ion-label>
     <!-- stacked input -->
     <ion-label *ngIf="model.inputType == eInputType.stacked" stacked>{{model?.placeholder|translate}}</ion-label>
-    <ion-input #searchInput (blur)='onBlur()' id="googlePlacesSearchInputWrapper" [(ngModel)]="autocomplete.value"
+    <ion-input #searchInput (ionBlur)='onBlur()' id="googlePlacesSearchInputWrapper" [(ngModel)]="autocomplete.value"
       (input)="updateSearchResults()" type="text" [required]="required"></ion-input>
   </ion-item>
   <div class="auto-complete-items" [hidden]="autocompleteItems.length == 0">
