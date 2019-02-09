@@ -40,18 +40,18 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   onchange: any;
   inputWasFocused: boolean = false;
   constructor(
-    public zone: NgZone, 
+    public zone: NgZone,
     private _renderer: Renderer) {
   }
   ngOnInit(): void {
     this.initAutoComplete();
   }
   initAutoComplete() {
-    
+
     this.model.countryCode = this.model.countryCode || 'IL';
 
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
-    
+
     this.geocoder = new google.maps.Geocoder;
     this.autocompleteItems = [];
 
@@ -64,15 +64,18 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   }
   onBlur() {
     this.inputWasFocused = true;
-    this.validate();
+    if (this.autocomplete.value == '') {
+      this.onchange(this.autocomplete);
+    }
   }
   updateSearchResults() {
     const query = this.autocomplete.value.trim();
     if (query == '') {
+      this.autocomplete = { value: '', location: { lat: 0, lng: 0 }, id: -1 };
       this.autocompleteItems = [];
       return;
     } else if (query.length > 2) {
-      this.GoogleAutocomplete.getPlacePredictions({ 
+      this.GoogleAutocomplete.getPlacePredictions({
         input: query,
         types: ['(cities)'],
         componentRestrictions: { country: this.model.countryCode },
@@ -142,12 +145,12 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     this.onchange = fn;
   }
   validate() {
-    // debugger;
-    // console.log('validate reached');
+    debugger;
+    console.log('validate reached');
     if (this.model.multiple) {
-      if (this.autocompleteArray.length == 0 && this.required && this.inputWasFocused) {
+      if (this.autocompleteArray.length == 0 && this.required) {
         {
-          // console.log("validator will return object -> Array");
+          console.log("validator will return object -> Array");
           return {
             "location": "location not valid"
           };
@@ -155,16 +158,16 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
         }
       }
     } else {
-      if ((!this.autocomplete.value || !this.autocomplete.location ||!this.autocomplete.location.lat || !this.autocomplete.location.lng) 
-          && this.required && this.inputWasFocused) {
-        
-        // console.log("validator will return object");
+      if ((!this.autocomplete.value || !this.autocomplete.location || !this.autocomplete.location.lat || !this.autocomplete.location.lng)
+        && this.required) {
+
+        console.log("validator will return object");
         return {
           "location": "location not valid"
         };
       }
-    
-      // console.log("validator will return null");
+
+      console.log("validator will return null");
       return null
     }
   }
