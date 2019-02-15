@@ -146,11 +146,9 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   }
   validate() {
     // debugger;
-    // console.log('validate reached');
     if (this.model.multiple) {
       if (this.autocompleteArray.length == 0 && this.required) {
         {
-          // console.log("validator will return object -> Array");
           return {
             "location": "location not valid"
           };
@@ -160,19 +158,17 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     } else {
       if ((!this.autocomplete.value || !this.autocomplete.location || !this.autocomplete.location.lat || !this.autocomplete.location.lng)
         && this.required) {
-
-        // console.log("validator will return object");
+        // debugger;
         return {
           "location": "location not valid"
         };
       }
 
-      // console.log("validator will return null");
       return null
     }
   }
   writeValue(value: IFormGooglePlacesInput | Array<IFormGooglePlacesInput>): void {
-    // debugger;
+
     if (this.model.multiple) {
       this.autocompleteArray = value as Array<IFormGooglePlacesInput> || [];
     } else {
