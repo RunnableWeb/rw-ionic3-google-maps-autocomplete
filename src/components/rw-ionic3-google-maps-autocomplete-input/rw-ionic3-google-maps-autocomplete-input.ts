@@ -184,8 +184,8 @@ export interface IFormGooglePlacesInput {
   id: any;
   value: string;
   location: {
-    lat: string | number;
-    lng: string | number
+    lat: number;
+    lng: number
   }
 }
 export interface IRWionic3GoogleMapsAutocompleteInputModel {
