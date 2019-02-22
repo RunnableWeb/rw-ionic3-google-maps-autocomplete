@@ -22,7 +22,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     checkBoxColor: 'primary',
     inputType: ERWInputType.fixed,
     iconColor: 'primary',
-    countryCode: 'IL'
+    countryCode: 'IL',
   };
 
   @Input() required = false;
@@ -196,6 +196,8 @@ export interface IRWionic3GoogleMapsAutocompleteInputModel {
   checkBoxColor?: string;
   inputType?: ERWInputType
   placeholder: string;
-  countryCode?: string
+  countryCode?: string;
+  closeIcon?: string;
+  closeIconColor?: String;
 }
 
