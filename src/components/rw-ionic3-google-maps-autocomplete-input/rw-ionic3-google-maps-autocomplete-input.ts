@@ -37,14 +37,30 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   autocompleteArray: IFormGooglePlacesInput[] = [];
   autocompleteItems: any[];
   geocoder: any;
-  onchange: any;
+  registerModelChange: any;
   inputWasFocused: boolean = false;
+  private _placeholder: any;
   constructor(
     public zone: NgZone,
     private _renderer: Renderer) {
   }
   ngOnInit(): void {
     this.initAutoComplete();
+  }
+
+  onchange(value) {
+    if (this.model.placeholderOnValueSelect) {
+      if (!this._placeholder) {
+        this._placeholder = this.model.placeholder;
+      }
+      if (this.autocompleteArray.length) {
+        this.model.placeholder = this.model.placeholderOnValueSelect;
+      } else {
+        this.model.placeholder = this._placeholder;
+      }
+    }
+    if (this.registerModelChange)
+      this.registerModelChange(value);
   }
   initAutoComplete() {
 
@@ -104,8 +120,8 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
         lng: -1
       }
     }
-    if (!this.model.multiple)
-      this.autocompleteItems = [];
+    this.autocompleteItems = [];
+    this.autocomplete.value = "";
     this.geocoder.geocode({ 'placeId': item.place_id }, (results, status) => {
       this.zone.run(() => {
         // debugger;
@@ -142,7 +158,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   }
 
   registerOnChange(fn: any): void {
-    this.onchange = fn;
+    this.registerModelChange = fn;
   }
   validate() {
     // debugger;
@@ -171,8 +187,10 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
 
     if (this.model.multiple) {
       this.autocompleteArray = value as Array<IFormGooglePlacesInput> || [];
+      this.onchange(this.autocompleteArray);
     } else {
       this.autocomplete = value as IFormGooglePlacesInput || {} as IFormGooglePlacesInput;
+      this.onchange(this.autocomplete);
     }
   }
   registerOnTouched(fn: any): void { }
@@ -199,5 +217,6 @@ export interface IRWionic3GoogleMapsAutocompleteInputModel {
   countryCode?: string;
   closeIcon?: string;
   closeIconColor?: String;
+  placeholderOnValueSelect?: string;
 }
 
