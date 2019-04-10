@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, OnInit, NgZone, Input, ViewChild, ElementRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, Validator, NG_VALIDATORS, NgForm } from '@angular/forms';
 import { TextInput } from 'ionic-angular';
 import { ERWInputType } from '../../enums';
@@ -42,7 +42,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   private _placeholder: any;
   constructor(
     public zone: NgZone,
-    private _renderer: Renderer) {
+    ) {
   }
   ngOnInit(): void {
     this.initAutoComplete();
