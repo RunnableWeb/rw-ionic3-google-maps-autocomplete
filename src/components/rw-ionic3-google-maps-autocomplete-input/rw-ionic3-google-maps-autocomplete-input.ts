@@ -2,6 +2,9 @@ import { Component, OnInit, NgZone, Input, ViewChild, ElementRef } from '@angula
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, Validator, NG_VALIDATORS, NgForm } from '@angular/forms';
 import { TextInput } from 'ionic-angular';
 import { ERWInputType } from '../../enums';
+import { GglCityService } from '../../../../rw-ng-common/services';
+import { MongoLocationTypeModel, IGglCity } from '../../../../rw-ng-common/models';
+import { FilterUtils } from '../../../../rw-ng-common/utils/loopback-v3';
 
 declare const google: any;
 
@@ -42,7 +45,8 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   private _placeholder: any;
   constructor(
     public zone: NgZone,
-    ) {
+    private _gglCitySvc: GglCityService
+  ) {
   }
   ngOnInit(): void {
     this.initAutoComplete();
@@ -123,14 +127,33 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     this.autocompleteItems = [];
     this.autocomplete.value = "";
     this.geocoder.geocode({ 'placeId': item.place_id }, (results, status) => {
-      this.zone.run(() => {
-        // debugger;
+      this.zone.run(async () => {
         if (status === 'OK' && results[0]) {
           selectedValue.location = {
             lat: Number.parseFloat(results[0].geometry.location.lat().toFixed(7)),
             lng: Number.parseFloat(results[0].geometry.location.lng().toFixed(7))
           };
 
+          this._updateOreCreatePoint(selectedValue)
+        } else {
+          try {
+            let res = await this._gglCitySvc.getEntities(FilterUtils.GetURLSearchParams({
+              where: {
+                name: item.description
+              }
+            }))
+            if (res && res.length) {
+              selectedValue.location = {
+                lat: (<any>res[0].location).coordinates[0],
+                lng: (<any>res[0].location).coordinates[1]
+              }
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        }
+
+        if (selectedValue.location && selectedValue.location.lat && selectedValue.location.lng) {
           if (this.model.multiple) {
             let indexOfItem = this.autocompleteArray.findIndex(i => i.id == selectedValue.id);
             if (indexOfItem == -1)
@@ -145,6 +168,43 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
         }
       })
     })
+  }
+  private async _updateOreCreatePoint(selectedValue) {
+    try {
+      const mongolocation = MongoLocationTypeModel.createFromGeoPoint({
+        lat: selectedValue.location.lat,
+        lng: selectedValue.location.lng
+      }).toJSON();
+
+      let res = await this._gglCitySvc.getEntities(FilterUtils.GetURLSearchParams({
+        where: {
+          and: [
+            { "location.coordinates": selectedValue.location.lat },
+            { "location.coordinates": selectedValue.location.lng },
+          ]
+        }
+      }))
+
+      let isEdit = res.length ? true : false;
+      if (!isEdit) {
+        await this._gglCitySvc.createEntity(<any>{
+          location: <any>{
+            ...mongolocation,
+            id: selectedValue.id
+          },
+          name: selectedValue.value
+        })
+      } else {
+        await this._gglCitySvc.updateEntity(res[0].id, {
+          location: <any>{
+            ...mongolocation
+          },
+          name: selectedValue.value
+        })
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   removeItemFromAutocompleteArray(location: IFormGooglePlacesInput) {
