@@ -2,7 +2,6 @@ import { Component, OnInit, NgZone, Input, ViewChild, ElementRef } from '@angula
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, Validator, NG_VALIDATORS, NgForm } from '@angular/forms';
 import { TextInput } from 'ionic-angular';
 import { ERWInputType } from '../../enums';
-import { GglCityService } from '../../../../rw-ng-common/services';
 import { MongoLocationTypeModel, IGglCity } from '../../../../rw-ng-common/models';
 import { FilterUtils } from '../../../../rw-ng-common/utils/loopback-v3';
 
@@ -17,6 +16,11 @@ declare const google: any;
   ]
 })
 export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValueAccessor, OnInit, Validator {
+  static _failResolver: IRwIonic3GoogleMapsAutocompleteInputComponentApiFailResolver
+  static setFailApiResolver(failResolver: IRwIonic3GoogleMapsAutocompleteInputComponentApiFailResolver)  {
+    RwIonic3GoogleMapsAutocompleteInputComponent._failResolver = failResolver;
+  }
+
   @Input() model: IRWionic3GoogleMapsAutocompleteInputModel = {
     placeholder: "",
     form: null,
@@ -44,8 +48,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   inputWasFocused: boolean = false;
   private _placeholder: any;
   constructor(
-    public zone: NgZone,
-    private _gglCitySvc: GglCityService
+    public zone: NgZone
   ) {
   }
   ngOnInit(): void {
@@ -133,23 +136,27 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
             lat: Number.parseFloat(results[0].geometry.location.lat().toFixed(7)),
             lng: Number.parseFloat(results[0].geometry.location.lng().toFixed(7))
           };
-
-          this._updateOreCreatePoint(selectedValue)
+          
+          if(this._isApiFailResolverSet()) {
+              this._updateOreCreatePoint(selectedValue);
+          }
         } else {
-          try {
-            let res = await this._gglCitySvc.getEntities(FilterUtils.GetURLSearchParams({
-              where: {
-                name: item.description
+          if(this._isApiFailResolverSet()) { 
+            try {
+              let res = await RwIonic3GoogleMapsAutocompleteInputComponent._failResolver.getEntities(FilterUtils.GetURLSearchParams({
+                where: {
+                  name: item.description
+                }
+              }))
+              if (res && res.length) {
+                selectedValue.location = {
+                  lat: (<any>res[0].location).coordinates[0],
+                  lng: (<any>res[0].location).coordinates[1]
+                }
               }
-            }))
-            if (res && res.length) {
-              selectedValue.location = {
-                lat: (<any>res[0].location).coordinates[0],
-                lng: (<any>res[0].location).coordinates[1]
-              }
+            } catch (error) {
+              console.error(error);
             }
-          } catch (error) {
-            console.error(error);
           }
         }
 
@@ -176,7 +183,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
         lng: selectedValue.location.lng
       }).toJSON();
 
-      let res = await this._gglCitySvc.getEntities(FilterUtils.GetURLSearchParams({
+      let res = await RwIonic3GoogleMapsAutocompleteInputComponent._failResolver.getEntities(FilterUtils.GetURLSearchParams({
         where: {
           and: [
             { "location.coordinates": selectedValue.location.lat },
@@ -187,7 +194,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
 
       let isEdit = res.length ? true : false;
       if (!isEdit) {
-        await this._gglCitySvc.createEntity(<any>{
+        await RwIonic3GoogleMapsAutocompleteInputComponent._failResolver.createEntity(<IGglCity>{
           location: <any>{
             ...mongolocation,
             id: selectedValue.id
@@ -195,7 +202,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
           name: selectedValue.value
         })
       } else {
-        await this._gglCitySvc.updateEntity(res[0].id, {
+        await RwIonic3GoogleMapsAutocompleteInputComponent._failResolver.updateEntity(res[0].id, {
           location: <any>{
             ...mongolocation
           },
@@ -256,6 +263,10 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   registerOnTouched(fn: any): void { }
   setDisabledState?(isDisabled: boolean): void { }
   registerOnValidatorChange?(fn: () => void): void { }
+
+  private _isApiFailResolverSet() {
+     return !!RwIonic3GoogleMapsAutocompleteInputComponent._failResolver;
+  }
 }
 
 export interface IFormGooglePlacesInput {
@@ -280,3 +291,8 @@ export interface IRWionic3GoogleMapsAutocompleteInputModel {
   placeholderOnValueSelect?: string;
 }
 
+export interface IRwIonic3GoogleMapsAutocompleteInputComponentApiFailResolver {
+  getEntities (filter: URLSearchParams): Promise<IGglCity[]>
+  createEntity (gglCity: IGglCity): Promise<IGglCity>
+  updateEntity(id: string, gllCity: IGglCity): Promise<IGglCity>
+}
