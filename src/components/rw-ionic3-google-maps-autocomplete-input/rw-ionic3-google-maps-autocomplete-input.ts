@@ -289,6 +289,9 @@ export interface IRWionic3GoogleMapsAutocompleteInputModel {
   closeIcon?: string;
   closeIconColor?: String;
   placeholderOnValueSelect?: string;
+  label?: {
+    addClassess?: string
+  }
 }
 
 export interface IRwIonic3GoogleMapsAutocompleteInputComponentApiFailResolver {
