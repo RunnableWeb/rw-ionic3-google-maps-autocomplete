@@ -17,7 +17,7 @@ declare const google: any;
 })
 export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValueAccessor, OnInit, Validator {
   static _failResolver: IRwIonic3GoogleMapsAutocompleteInputComponentApiFailResolver
-  static setFailApiResolver(failResolver: IRwIonic3GoogleMapsAutocompleteInputComponentApiFailResolver)  {
+  static setFailApiResolver(failResolver: IRwIonic3GoogleMapsAutocompleteInputComponentApiFailResolver) {
     RwIonic3GoogleMapsAutocompleteInputComponent._failResolver = failResolver;
   }
 
@@ -136,12 +136,12 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
             lat: Number.parseFloat(results[0].geometry.location.lat().toFixed(7)),
             lng: Number.parseFloat(results[0].geometry.location.lng().toFixed(7))
           };
-          
-          if(this._isApiFailResolverSet()) {
-              this._updateOreCreatePoint(selectedValue);
+
+          if (this._isApiFailResolverSet()) {
+            this._updateOreCreatePoint(selectedValue);
           }
         } else {
-          if(this._isApiFailResolverSet()) { 
+          if (this._isApiFailResolverSet()) {
             try {
               let res = await RwIonic3GoogleMapsAutocompleteInputComponent._failResolver.getEntities(FilterUtils.GetURLSearchParams({
                 where: {
@@ -221,7 +221,8 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   }
 
   isLocationSelected(location) {
-    return this.autocompleteArray.filter(i => i.id == location.place_id).length > 0;
+    if (this.autocompleteArray.length > 0)
+      return this.autocompleteArray.filter(i => i.id == location.place_id).length > 0;
   }
 
   registerOnChange(fn: any): void {
@@ -251,10 +252,10 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     }
   }
   writeValue(value: IFormGooglePlacesInput | Array<IFormGooglePlacesInput>): void {
-
     if (this.model.multiple) {
       this.autocompleteArray = value as Array<IFormGooglePlacesInput> || [];
       this.onchange(this.autocompleteArray);
+
     } else {
       this.autocomplete = value as IFormGooglePlacesInput || {} as IFormGooglePlacesInput;
       this.onchange(this.autocomplete);
@@ -265,7 +266,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
   registerOnValidatorChange?(fn: () => void): void { }
 
   private _isApiFailResolverSet() {
-     return !!RwIonic3GoogleMapsAutocompleteInputComponent._failResolver;
+    return !!RwIonic3GoogleMapsAutocompleteInputComponent._failResolver;
   }
 }
 
@@ -295,7 +296,7 @@ export interface IRWionic3GoogleMapsAutocompleteInputModel {
 }
 
 export interface IRwIonic3GoogleMapsAutocompleteInputComponentApiFailResolver {
-  getEntities (filter: URLSearchParams): Promise<IGglCity[]>
-  createEntity (gglCity: IGglCity): Promise<IGglCity>
+  getEntities(filter: URLSearchParams): Promise<IGglCity[]>
+  createEntity(gglCity: IGglCity): Promise<IGglCity>
   updateEntity(id: string, gllCity: IGglCity): Promise<IGglCity>
 }
