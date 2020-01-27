@@ -251,7 +251,9 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     }
   }
   writeValue(value: IFormGooglePlacesInput | Array<IFormGooglePlacesInput>): void {
-
+    // debugger;
+    // console.log("WRITE VALUE");
+    // console.log(value);
     if (this.model.multiple) {
       this.autocompleteArray = value as Array<IFormGooglePlacesInput> || [];
       this.onchange(this.autocompleteArray);
