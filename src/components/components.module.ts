@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import { TranslateModule } from '@ngx-translate/core';
 
 import { RwIonic3GoogleMapsAutocompleteInputComponent } from './rw-ionic3-google-maps-autocomplete-input/rw-ionic3-google-maps-autocomplete-input';
-import { FormsModule } from '@angular/forms';
 @NgModule({
 	declarations: [RwIonic3GoogleMapsAutocompleteInputComponent],
 	imports: [
 		IonicModule,
-		BrowserModule,
+		CommonModule,
 		FormsModule,
 		TranslateModule
 	],

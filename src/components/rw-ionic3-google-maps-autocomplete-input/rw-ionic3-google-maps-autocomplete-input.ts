@@ -260,7 +260,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
       this.onchange(this.autocompleteArray);
 
     } else {
-      this.autocomplete = value as IFormGooglePlacesInput || {} as IFormGooglePlacesInput;
+      this.autocomplete = value as IFormGooglePlacesInput || { value: '' } as IFormGooglePlacesInput;
       this.onchange(this.autocomplete);
     }
   }
