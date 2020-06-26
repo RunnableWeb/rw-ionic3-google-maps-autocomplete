@@ -1,6 +1,6 @@
 import { Component, OnInit, NgZone, Input, ViewChild, ElementRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, Validator, NG_VALIDATORS, NgForm } from '@angular/forms';
-import { TextInput } from 'ionic-angular';
+import { TextInput } from '@ionic/angular';
 import { ERWInputType } from '../../enums';
 import { MongoLocationTypeModel, IGglCity } from '../../../../rw-ng-common/models';
 import { FilterUtils } from '../../../../rw-ng-common/utils/loopback-v3';
