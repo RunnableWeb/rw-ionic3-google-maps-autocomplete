@@ -1,9 +1,11 @@
 import { Component, OnInit, NgZone, Input, ViewChild, ElementRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, Validator, NG_VALIDATORS, NgForm } from '@angular/forms';
-import { TextInput } from '@ionic/angular';
+import { IonText } from '@ionic/angular';
+
+import { MongoLocationTypeModel, IGglCity } from '@rw-ng-common/models';
+import { FilterUtils } from '@rw-ng-common/utils/loopback-v3';
+
 import { ERWInputType } from '../../enums';
-import { MongoLocationTypeModel, IGglCity } from '../../../../rw-ng-common/models';
-import { FilterUtils } from '../../../../rw-ng-common/utils/loopback-v3';
 
 declare const google: any;
 
@@ -23,19 +25,20 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
 
   @Input() model: IRWionic3GoogleMapsAutocompleteInputModel = {
     placeholder: "",
-    form: null,
     hideIcon: false,
+    form: null,
     multiple: false,
     checkBoxColor: 'primary',
     inputType: ERWInputType.fixed,
     iconColor: 'primary',
-    countryCode: 'IL'
+    countryCode: 'IL',
+    required: false,
   };
 
   @Input() required = false;
 
-  @ViewChild('inputContainer') inputContainer: ElementRef;
-  @ViewChild('searchInput') searchInput: TextInput;
+  @ViewChild('inputContainer', { static : true }) inputContainer: ElementRef;
+  @ViewChild('searchInput', { static : true }) searchInput: IonText;
 
   eInputType: typeof ERWInputType = ERWInputType;
 
@@ -290,6 +293,7 @@ export interface IRWionic3GoogleMapsAutocompleteInputModel {
   closeIcon?: string;
   closeIconColor?: String;
   placeholderOnValueSelect?: string;
+  required: boolean;
   label?: {
     addClassess?: string
   }
