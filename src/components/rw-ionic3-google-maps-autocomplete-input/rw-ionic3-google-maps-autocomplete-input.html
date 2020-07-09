@@ -1,15 +1,15 @@
 <div class="rw-ionic3-google-maps-autocomplete-wrapper">
-  <ion-item text-wrap #inputContainer class="input-container"
+  <ion-item text-wrap #inputContainer class="input-container" [lines]="!model?.fullLine || 'full'"
     [ngClass]="{'input-container-error':isFormSubmitted() && model?.required && !autocomplete.value}">
     <ion-icon item-start name="pin" [color]="model?.iconColor" *ngIf="!model?.hideIcon"></ion-icon>
     <!-- default input-->
     <ion-label *ngIf="!model.inputType" fixed><span class="{{model.label?.addClassess}}"> {{model?.placeholder|translate}}</span></ion-label>
     <!-- fixed input -->
-    <ion-label *ngIf="model.inputType == eInputType.fixed" fixed><span class="{{model.label?.addClassess}}">{{model?.placeholder|translate}}</span></ion-label>
+    <ion-label *ngIf="model.inputType == eInputType.fixed"   position="fixed"><span class="{{model.label?.addClassess}}">{{model?.placeholder|translate}}</span></ion-label>
     <!-- floating input -->
-    <ion-label *ngIf="model.inputType == eInputType.floating" floating><span class="{{model.label?.addClassess}}">{{model?.placeholder|translate}}</span></ion-label>
+    <ion-label *ngIf="model.inputType == eInputType.floating"  position="floating" ><span class="{{model.label?.addClassess}}">{{model?.placeholder|translate}}</span></ion-label>
     <!-- stacked input -->
-    <ion-label *ngIf="model.inputType == eInputType.stacked" stacked><span class="{{model.label?.addClassess}}">{{model?.placeholder|translate}}</span></ion-label>
+    <ion-label *ngIf="model.inputType == eInputType.stacked" position="stacked"><span class="{{model.label?.addClassess}}">{{model?.placeholder|translate}}</span></ion-label>
     <ion-input #searchInput (ionBlur)='onBlur()' id="googlePlacesSearchInputWrapper" [(ngModel)]="autocomplete.value"
       (input)="updateSearchResults()" type="text" [required]="required"></ion-input>
   </ion-item>

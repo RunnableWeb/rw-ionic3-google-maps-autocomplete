@@ -28,6 +28,7 @@ export class RwIonic3GoogleMapsAutocompleteInputComponent implements ControlValu
     hideIcon: false,
     form: null,
     multiple: false,
+    fullLine: false,
     checkBoxColor: 'primary',
     inputType: ERWInputType.fixed,
     iconColor: 'primary',
@@ -287,7 +288,8 @@ export interface IRWionic3GoogleMapsAutocompleteInputModel {
   iconColor?: string
   multiple?: boolean;
   checkBoxColor?: string;
-  inputType?: ERWInputType
+  inputType?: ERWInputType;
+  fullLine?: boolean;
   placeholder: string;
   countryCode?: string;
   closeIcon?: string;
