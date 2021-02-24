@@ -13,7 +13,7 @@
     <ion-input #searchInput (ionBlur)='onBlur()' id="googlePlacesSearchInputWrapper" [(ngModel)]="autocomplete.value"
       (input)="updateSearchResults()" type="text" [required]="required"></ion-input>
   </ion-item>
-  <div class="auto-complete-items" [hidden]="autocompleteItems.length == 0">
+  <div class="auto-complete-items" [hidden]="autocompleteItems?.length == 0">
     <button ion-button clear type="button"
       (click)="$event.stopPropagation(); autocompleteItems = []; initAutoComplete()" class="hide-auto-complete"
       *ngIf="model?.multiple">
@@ -30,7 +30,7 @@
     </ion-list>
   </div>
 </div>
-<div class="value-chips-wrapper" *ngIf="autocompleteArray.length && model?.multiple">
+<div class="value-chips-wrapper" *ngIf="autocompleteArray?.length && model?.multiple">
   <div class="value-chip" *ngFor="let item of autocompleteArray">
     <div>
       {{item.value}}
