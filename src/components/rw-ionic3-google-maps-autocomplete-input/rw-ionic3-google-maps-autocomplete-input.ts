@@ -299,6 +299,7 @@ export interface IRWionic3GoogleMapsAutocompleteInputModel {
   label?: {
     addClassess?: string
   }
+  lines?: string;
 }
 
 export interface IRwIonic3GoogleMapsAutocompleteInputComponentApiFailResolver {
