@@ -14,12 +14,12 @@
       (input)="updateSearchResults()" type="text" [required]="required"></ion-input>
   </ion-item>
   <div class="auto-complete-items" [hidden]="autocompleteItems?.length == 0">
-    <button ion-button clear type="button"
+    <ion-button clear type="button"
       (click)="$event.stopPropagation(); autocompleteItems = []; initAutoComplete()" class="hide-auto-complete"
       *ngIf="model?.multiple">
       <ion-icon [name]="model.closeIcon ? model.closeIcon : 'close'"
         [color]="model.closeIconColor ? model.closeIconColor : 'danger'"></ion-icon>
-    </button>
+    </ion-button>
     <ion-list class="ion-no-margin">
       <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
         <ion-icon *ngIf="!model?.multiple" name="pin" [color]="model?.iconColor" item-start></ion-icon>
