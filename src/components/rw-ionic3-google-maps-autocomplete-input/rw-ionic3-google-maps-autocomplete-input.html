@@ -1,5 +1,5 @@
 <div class="rw-ionic3-google-maps-autocomplete-wrapper">
-  <ion-item [lines]="model?.lines" class="ion-text-wrap" #inputContainer class="input-container" [lines]="!model?.fullLine || 'full'"
+  <ion-item [lines]="model?.lines" class="ion-text-wrap" #inputContainer class="input-container"
     [ngClass]="{'input-container-error':isFormSubmitted() && model?.required && !autocomplete.value}">
     <ion-icon item-start name="pin" [color]="model?.iconColor" *ngIf="!model?.hideIcon"></ion-icon>
     <!-- default input-->
@@ -21,7 +21,7 @@
         [color]="model.closeIconColor ? model.closeIconColor : 'danger'"></ion-icon>
     </ion-button>
     <ion-list class="ion-no-margin">
-      <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+      <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)" [lines]="model?.lines">
         <ion-icon *ngIf="!model?.multiple" name="pin" [color]="model?.iconColor" item-start></ion-icon>
         <ion-label>{{ item.description }}</ion-label>
         <ion-checkbox *ngIf="model?.multiple" [color]="model.checkBoxColor" [checked]="isLocationSelected(item)"
